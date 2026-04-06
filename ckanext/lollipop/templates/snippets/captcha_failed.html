@@ -1,0 +1,28 @@
+{#
+Embeds instructions for when the CAPTCHA has not been
+successful into a page.
+
+
+    {% snippet 'snippets/captcha_failed.html' %}
+
+#}
+
+{% block captcha_failed %}
+  <div name="captcha_failed">
+  <p>
+  This text is a placeholder for where you should describe 
+  what the user should do when the CAPTCHA they've been asked
+  to complete has failed.  This is should also explain
+  why a CAPTCHA has been used.
+  </p>
+
+  <p>
+  Provide some contact details here.
+  </p>
+
+  <p>
+  It is expected that you will override this block in your CKAN theme in most typical
+  CKAN installations.
+  </p>
+  </div>
+{% endblock %}

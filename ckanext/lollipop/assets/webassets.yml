@@ -1,0 +1,14 @@
+# lollipop-js:
+#   filter: rjsmin
+#   output: ckanext-lollipop/%(version)s-lollipop.js
+#   contents:
+#     - js/lollipop.js
+#   extra:
+#     preload:
+#       - base/main
+
+lollipop-css:
+   filter: cssrewrite
+   output: ckanext-lollipop/%(version)s-lollipop.css
+   contents:
+     - lollipop.css

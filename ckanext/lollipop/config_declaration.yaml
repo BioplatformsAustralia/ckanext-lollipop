@@ -1,0 +1,19 @@
+# schema version of the config declaration. At the moment, the only valid value is `1`
+version: 1
+- annotation: ckanext-lollipop settings
+  options:
+    - key: ckanext.lollipop.cookie_expiry
+      default: 7
+      description: |
+          This configuration item sets the duration of expiry of the
+          cookie set by the ckanext-lollipop extension on succesful completion
+          of the CAPTCHA
+      validators: unicode_safe text_type
+      required: false
+    - key: ckanext.lollipop.cookie_name
+      default: ckanext-lollipop-yum
+      description: |
+          This configuration item sets the name of the cookie that is set
+          when the non-logged in user completes the CAPTCHA
+      validators: unicode_safe text_type
+      required: false

@@ -1,0 +1,19 @@
+{% block secondary %}{% endblock %}
+
+{% block primary %}
+  <article class="module" role="main">
+    <div class="module-content">
+      FIXME Captcha
+      {% block lollipop %}
+          <h1 class="page-heading">
+            {% block lollipop_subtitle %}
+              {{ _('FIXME CAPTCHA Required') }}
+            {% endblock %}
+          </h1>
+          {% snippet 'ckanext_lollipop/lollipop_requirement.html' %}
+          {% snippet 'ckanext_lollipop/lollipop_form.html' %}
+      {% endblock %}
+    </div>
+  </article>
+{% endblock %}
+

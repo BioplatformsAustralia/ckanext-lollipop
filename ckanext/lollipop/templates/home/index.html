@@ -1,0 +1,11 @@
+{% ckan_extends %}
+
+{% set logged_in = true if c.userobj else false %}
+
+{% block content %}
+  {% if not logged_in and h.lollipop_required() %}
+    {% snippet 'ckanext_lollipop/lollipop_home_content.html' %}
+  {% else %}
+    {{ super() }}
+  {% endif %}
+{% endblock %}
