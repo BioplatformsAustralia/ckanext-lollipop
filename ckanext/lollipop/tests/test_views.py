@@ -19,7 +19,7 @@ def test_lollipop_processed(app, reset_db):
     resp = app.get(tk.h.url_for("lollipop.lollipop_process"))
     assert resp.status_code == 200
     # look for phrase from rejection template
-    assert resp.body.find("has been rejected by the user") >= 0
+    assert resp.body.find("CAPTCHA Required") >= 0
 
 
 @pytest.mark.usefixtures("with_request_context")

@@ -57,6 +57,10 @@ def lollipop_required():
     if request.path.startswith(tk.url_for("lollipop.lollipop_captcha_failed")):
         return False
 
+    # exclude processing CAPTCHA
+    if request.path.startswith(tk.url_for("lollipop.lollipop_process")):
+        return False
+
     # FIXME pages that need lollipops here
 
     return True
