@@ -5,11 +5,19 @@ FIXME determine action
 
 <form class="dataset-form form-horizontal" method="post" action="{{ h.url_for('lollipop.lollipop_process') }}" data-module="basic-form" id="lollipop-form">
 <input id="field-return-to" type="hidden" name="return_to" value="{{ h.current_url() }}">
+
+{% if g.recaptcha_publickey %}
+  {% snippet "snippets/recaptcha.html", public_key=g.recaptcha_publickey, callback="onRecptchaSuccess" %}
+{% endif %}
+
+<script>
+  function onRecaptchaSuccess(token) {
+    document.getElementById("lollipop-form").submit();
+  }
+</script>
+
 <div class="form-actions">
   <div class="btn-toolbar pull-right">
-    <button class="btn btn-secondary" name="reject" type="submit" data-dismiss="modal">
-       {% block reject_text %}{{ _('Reject') }}{% endblock %}
-    </button>
     <button class="btn btn-primary" name="accept" type="submit">
        <i class="fa fa-plus-circle"></i>
        {% block accept_text %}{{ _('Accept') }}{% endblock %}
