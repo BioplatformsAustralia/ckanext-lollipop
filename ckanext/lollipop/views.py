@@ -50,6 +50,7 @@ def lollipop_captcha_failed(self):
 lollipop.add_url_rule(
     rule="/captcha_process",
     view_func=lollipop_process,
+    methods=["POST"],
 )
 
 lollipop.add_url_rule(
