@@ -3,6 +3,7 @@ from flask.views import MethodView
 from ckan.common import _, g, config
 from ckan.lib.base import render, abort, request
 from ckan.logic import get_action, ValidationError, NotFound, NotAuthorized
+from ckanext.lollipop.util import cookie_filling
 import ckan.logic as logic
 import ckan.lib.captcha as captcha
 import ckan.lib.helpers as h
@@ -18,7 +19,7 @@ lollipop = Blueprint("lollipop", __name__)
 def lollipop_process():
     cookie_name = config.get('ckanext.lollipop.cookie_name', 'ckanext-lollipop-yum')
     cookie_expiry = int(config.get('ckanext.lollipop.cookie_expiry', 7))
-    cookie_value = "proceed with care"
+    cookie_value = cookie_filling()
 
     lollipop_status = 'bad'
     expiry = 0

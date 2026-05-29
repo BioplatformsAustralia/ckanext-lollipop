@@ -1,9 +1,9 @@
 import ckan.plugins.toolkit as tk
-from ckan.common import g
+from ckan.common import g, config
 from ckan import logic
 from ckan.lib.base import request
 from ckan.logic import NotFound
-
+from ckanext.lollipop.util import cookie_filling
 
 from logging import getLogger
 
@@ -21,6 +21,14 @@ def _get_user(user_name):
     user = tk.get_action("user_show")(_get_admin_ctx(), user_id)
     return user
 
+def _cookie_valid():
+    cookie_name = config.get('ckanext.lollipop.cookie_name', 'ckanext-lollipop-yum')
+
+    if cookie_name in request.cookies:
+        if request.cookies.get(cookie_name) == cookie_filling():
+            return True
+
+    return False
 
 def _get_admin_ctx():
     site_user = tk.get_action("get_site_user")({"ignore_auth": True}, {})["name"]
@@ -59,6 +67,10 @@ def lollipop_required():
 
     # exclude processing CAPTCHA
     if request.path.startswith(tk.url_for("lollipop.lollipop_process")):
+        return False
+
+    # exclude if have a valid cookie from ckanext-lollipop
+    if _cookie_valid():
         return False
 
     # FIXME pages that need lollipops here
