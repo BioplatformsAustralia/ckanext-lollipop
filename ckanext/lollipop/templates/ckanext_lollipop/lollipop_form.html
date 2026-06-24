@@ -1,7 +1,5 @@
 {% import 'macros/form.html' as form %}
 
-FIXME determine action
-
 <form class="dataset-form form-horizontal" method="post" action="{{ h.url_for('lollipop.lollipop_process') }}" data-module="basic-form" id="lollipop-form">
 <input id="field-return-to" type="hidden" name="return_to" value="{{ h.current_url() }}">
 
