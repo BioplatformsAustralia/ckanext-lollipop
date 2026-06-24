@@ -1,6 +1,5 @@
 {% import 'macros/form.html' as form %}
 
-FIXME add CAPTCHA here
 FIXME determine action
 
 <form class="dataset-form form-horizontal" method="post" action="{{ h.url_for('lollipop.lollipop_process') }}" data-module="basic-form" id="lollipop-form">
@@ -18,9 +17,9 @@ FIXME determine action
 
 <div class="form-actions">
   <div class="btn-toolbar pull-right">
-    <button class="btn btn-primary" name="accept" type="submit">
+    <button class="btn btn-primary" name="continue" type="submit">
        <i class="fa fa-plus-circle"></i>
-       {% block accept_text %}{{ _('Accept') }}{% endblock %}
+       {% block continue_text %}{{ _('Continue') }}{% endblock %}
     </button>
   </div>
 </div>
