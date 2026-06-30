@@ -15,6 +15,18 @@ log = logging.getLogger(__name__)
 @pytest.mark.ckan_config("ckan.plugins", "lollipop")
 @pytest.mark.usefixtures("with_plugins", "with_request_context")
 class TestLollipopHelpers(object):
+    def test__get_user_name(self):
+        user = factories.User()
+
+        userobj = model.User.by_name(user["name"])
+
+        g.user = user["name"]
+        g.userobj = userobj
+
+        assert lollipop_helpers._get_user_name(userobj.id) == user["name"]
+
+        assert lollipop_helpers._get_user_name(None) == user["name"]
+
     def test_lollipop_required(self, app):
         required = [
             tk.url_for("home.index"),
