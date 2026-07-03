@@ -43,6 +43,26 @@ def _get_plugin_extras(user):
         return {}
 
 
+def lollipop_set(response, expiry=None):
+    cookie_name = config.get('ckanext.lollipop.cookie_name', 'ckanext-lollipop-yum')
+    cookie_value = cookie_filling()
+
+    if not expiry:
+        cookie_expiry = int(config.get('ckanext.lollipop.cookie_expiry', 7))
+    else:
+        cookie_expiry = 0
+
+    response.set_cookie(cookie_name, expires=expiry, value=cookie_value)
+
+    return True
+
+def lollipop_update(response):
+    return lollipop_set(response)
+
+def lollipop_clear(response):
+    return lollipop_set(response, expiry=0)
+
+
 def lollipop_process(context, data_dict):
     """Process the submitted CAPTCHA form
 

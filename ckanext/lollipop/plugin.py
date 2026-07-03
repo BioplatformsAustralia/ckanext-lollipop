@@ -34,14 +34,14 @@ class LollipopPlugin(plugins.SingletonPlugin):
 
     # ILollipop
 
-    def lollipop_set(self):
-        return logic.lollipop_set()
+    def lollipop_set(self, response):
+        return logic.lollipop_set(response)
 
-    def lollipop_update(self):
-        return logic.lollipop_update()
+    def lollipop_update(self, response):
+        return logic.lollipop_update(response)
 
     def lollipop_clear(self):
-        return logic.lollipop_clear()
+        return logic.lollipop_clear(response)
 
     def lollipop_required(self):
         return logic.lollipop_required()

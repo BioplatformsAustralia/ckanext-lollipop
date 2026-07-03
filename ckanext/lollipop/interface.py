@@ -6,21 +6,21 @@ import ckan.plugins.interfaces as interfaces
 
 
 class ILollipop(interfaces.Interface):
-    def lollipop_set(self):
+    def lollipop_set(self, response):
         """Set the cookie associated with ckanext-lollipop
 
         :rtype: bool
         """
         return True
 
-    def lollipop_update(self):
+    def lollipop_update(self, response):
         """Update the cookie associated with ckanext-lollipop
 
         :rtype: bool
         """
         return True
 
-    def lollipop_clear(self):
+    def lollipop_clear(self, response):
         """Clear the cookie associated with ckanext-lollipop
 
         :rtype: bool

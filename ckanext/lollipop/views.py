@@ -3,11 +3,12 @@ from flask.views import MethodView
 from ckan.common import _, g, config
 from ckan.lib.base import render, abort, request
 from ckan.logic import get_action, ValidationError, NotFound, NotAuthorized
-from ckanext.lollipop.util import cookie_filling
+import ckan.plugins as p
 import ckan.logic as logic
 import ckan.lib.captcha as captcha
 import ckan.lib.helpers as h
 import ckan.lib.navl.dictization_functions as dict_fns
+import ckanext.lollipop.interface as interface
 
 from logging import getLogger
 from datetime import datetime, timedelta
@@ -17,12 +18,7 @@ logger = getLogger(__name__)
 lollipop = Blueprint("lollipop", __name__)
 
 def lollipop_process():
-    cookie_name = config.get('ckanext.lollipop.cookie_name', 'ckanext-lollipop-yum')
-    cookie_expiry = int(config.get('ckanext.lollipop.cookie_expiry', 7))
-    cookie_value = cookie_filling()
-
     lollipop_status = 'bad'
-    expiry = 0
 
     try:
         data_dict = logic.clean_dict(
@@ -40,18 +36,20 @@ def lollipop_process():
     try:
         captcha.check_recaptcha(request)
         lollipop_status = 'good'
-        expiry = datetime.now() + timedelta(days=cookie_expiry)
     except captcha.CaptchaError:
         error_msg = _(u'Bad Captcha. Please try again.')
         h.flash_error(error_msg)
         lollipop_status = 'bad'
-        expiry = 0
 
     response =  h.redirect_to(
         data_dict.get("return_to", "home.index"), lollipop_status=lollipop_status
     )
 
-    response.set_cookie(cookie_name, expires=expiry, value=cookie_value)
+    for impl in p.PluginImplementations(interface.ILollipop):
+        if lollipop_status is 'good':
+            impl.lollipop_set(response)
+        else:
+            impl.lollipop_clear(response)
 
     return response
 
