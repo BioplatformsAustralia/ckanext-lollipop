@@ -40,7 +40,7 @@ class LollipopPlugin(plugins.SingletonPlugin):
     def lollipop_update(self, response):
         return logic.lollipop_update(response)
 
-    def lollipop_clear(self):
+    def lollipop_clear(self, response):
         return logic.lollipop_clear(response)
 
     def lollipop_required(self):
