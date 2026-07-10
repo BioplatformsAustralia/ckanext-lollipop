@@ -5,6 +5,8 @@ from ckan.lib.base import request
 from ckan.logic import NotFound
 from ckanext.lollipop.util import cookie_filling
 
+import ckan.lib.captcha as captcha
+
 from logging import getLogger
 
 logger = getLogger(__name__)
@@ -66,13 +68,20 @@ def lollipop_clear(response):
 def lollipop_process(context, data_dict):
     """Process the submitted CAPTCHA form
 
-    :rtype: bool
+    :rtype: string
     """
 
-    # FIXME add some captcha handling here
+    lollipop_status = None
 
+    try:
+        captcha.check_recaptcha(request)
+        lollipop_status = 'good'
+    except captcha.CaptchaError:
+        error_msg = _(u'Bad Captcha. Please try again.')
+        h.flash_error(error_msg)
+        lollipop_status = 'bad'
 
-    return True
+    return lollipop_status
 
 
 def lollipop_required():

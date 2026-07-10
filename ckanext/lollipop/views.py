@@ -18,6 +18,7 @@ logger = getLogger(__name__)
 lollipop = Blueprint("lollipop", __name__)
 
 def lollipop_process():
+    context = {}
     lollipop_status = 'bad'
 
     try:
@@ -33,20 +34,18 @@ def lollipop_process():
     except dict_fns.DataError:
         base.abort(400, _(u'Integrity Error'))
 
-    try:
-        captcha.check_recaptcha(request)
-        lollipop_status = 'good'
-    except captcha.CaptchaError:
-        error_msg = _(u'Bad Captcha. Please try again.')
-        h.flash_error(error_msg)
-        lollipop_status = 'bad'
+    processed = False
+    for impl in p.PluginImplementations(interface.ILollipop):
+        lollipop_status = impl.lollipop_process(context, data_dict)
+        if lollipop_status:
+            break
 
     response =  h.redirect_to(
         data_dict.get("return_to", "home.index"), lollipop_status=lollipop_status
     )
 
     for impl in p.PluginImplementations(interface.ILollipop):
-        if lollipop_status is 'good':
+        if lollipop_status == 'good':
             impl.lollipop_set(response)
         else:
             impl.lollipop_clear(response)
