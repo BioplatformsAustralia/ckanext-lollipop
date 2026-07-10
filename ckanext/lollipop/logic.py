@@ -14,15 +14,6 @@ logger = getLogger(__name__)
 # FIXME Add config declarations
 CONFIG_LOLLIPOP_COOKIE = "ckanext.lollipop.cookie_name"
 
-
-def _get_user(user_name):
-    if not user_name:
-        raise NotFound
-
-    user_id = {"id": user_name, "include_plugin_extras": True}
-    user = tk.get_action("user_show")(_get_admin_ctx(), user_id)
-    return user
-
 def _cookie_valid():
     cookie_name = config.get('ckanext.lollipop.cookie_name', 'ckanext-lollipop-yum')
 
@@ -31,18 +22,6 @@ def _cookie_valid():
             return True
 
     return False
-
-def _get_admin_ctx():
-    site_user = tk.get_action("get_site_user")({"ignore_auth": True}, {})["name"]
-    admin_ctx = {"ignore_auth": True, "user": site_user}
-    return admin_ctx
-
-
-def _get_plugin_extras(user):
-    if "plugin_extras" in user and user.get("plugin_extras") is not None:
-        return user.get("plugin_extras")
-    else:
-        return {}
 
 
 def lollipop_set(response, expiry=None):
