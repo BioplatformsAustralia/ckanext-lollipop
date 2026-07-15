@@ -114,8 +114,15 @@ class TestLollipopPlugin(object):
 
     def test_lollipop_required(self):
         pass
-        #return logic.lollipop_required()
 
-    def test_lollipop_process(self):
-        pass
-        #return logic.lollipop_process(context, data_dict)
+    # Google test key for reCaptcha
+    @pytest.mark.ckan_config("ckan.recaptcha.privatekey", "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe")
+    def test_lollipop_process(self,app):
+        p = get_plugin("lollipop")
+
+        with app.flask_app.test_request_context(
+            tk.url_for("lollipop.lollipop_process"),
+            method="GET",
+            data={"g-recaptcha-response": "willAlwaysPassWithTestKey"},
+            ):
+                assert p.lollipop_process({},{}) == "good"
