@@ -21,18 +21,15 @@ def lollipop_process():
     context = {}
     lollipop_status = 'bad'
 
-    try:
-        data_dict = logic.clean_dict(
-            dict_fns.unflatten(logic.tuplize_dict(logic.parse_params(request.form)))
-        )
+    data_dict = logic.clean_dict(
+        dict_fns.unflatten(logic.tuplize_dict(logic.parse_params(request.form)))
+    )
 
-        files_dict = logic.clean_dict(
-            dict_fns.unflatten(logic.tuplize_dict(logic.parse_params(request.files)))
-        )
+    files_dict = logic.clean_dict(
+        dict_fns.unflatten(logic.tuplize_dict(logic.parse_params(request.files)))
+    )
 
-        data_dict.update(files_dict)
-    except dict_fns.DataError:
-        base.abort(400, _(u'Integrity Error'))
+    data_dict.update(files_dict)
 
     processed = False
     for impl in p.PluginImplementations(interface.ILollipop):
@@ -52,7 +49,7 @@ def lollipop_process():
 
     return response
 
-def lollipop_captcha_failed(self):
+def lollipop_captcha_failed():
     return render("ckanext_lollipop/lollipop_captcha_failed.html", {})
 
 lollipop.add_url_rule(
