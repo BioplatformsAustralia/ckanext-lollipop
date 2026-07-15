@@ -14,8 +14,9 @@ logger = getLogger(__name__)
 
 CONFIG_LOLLIPOP_COOKIE = "ckanext.lollipop.cookie_name"
 
+
 def _cookie_valid():
-    cookie_name = config.get('ckanext.lollipop.cookie_name', 'ckanext-lollipop-yum')
+    cookie_name = config.get("ckanext.lollipop.cookie_name", "ckanext-lollipop-yum")
 
     if cookie_name in request.cookies:
         if request.cookies.get(cookie_name) == cookie_filling():
@@ -25,11 +26,11 @@ def _cookie_valid():
 
 
 def lollipop_set(response, expiry=None):
-    cookie_name = config.get('ckanext.lollipop.cookie_name', 'ckanext-lollipop-yum')
+    cookie_name = config.get("ckanext.lollipop.cookie_name", "ckanext-lollipop-yum")
     cookie_value = cookie_filling()
 
     if expiry is not None:
-        cookie_expiry = int(config.get('ckanext.lollipop.cookie_expiry', 7))
+        cookie_expiry = int(config.get("ckanext.lollipop.cookie_expiry", 7))
     else:
         cookie_expiry = expiry
 
@@ -37,11 +38,14 @@ def lollipop_set(response, expiry=None):
 
     return True
 
+
 def lollipop_update(response):
     return lollipop_set(response)
 
+
 def lollipop_clear(response):
     return lollipop_set(response, expiry=0)
+
 
 def lollipop_process(context, data_dict):
     """Process the submitted CAPTCHA form
@@ -53,9 +57,9 @@ def lollipop_process(context, data_dict):
 
     try:
         captcha.check_recaptcha(request)
-        lollipop_status = 'good'
+        lollipop_status = "good"
     except captcha.CaptchaError:
-        lollipop_status = 'bad'
+        lollipop_status = "bad"
 
     return lollipop_status
 

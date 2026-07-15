@@ -17,9 +17,10 @@ logger = getLogger(__name__)
 
 lollipop = Blueprint("lollipop", __name__)
 
+
 def lollipop_process():
     context = {}
-    lollipop_status = 'bad'
+    lollipop_status = "bad"
 
     data_dict = logic.clean_dict(
         dict_fns.unflatten(logic.tuplize_dict(logic.parse_params(request.form)))
@@ -37,20 +38,22 @@ def lollipop_process():
         if lollipop_status:
             break
 
-    response =  h.redirect_to(
+    response = h.redirect_to(
         data_dict.get("return_to", "home.index"), lollipop_status=lollipop_status
     )
 
     for impl in p.PluginImplementations(interface.ILollipop):
-        if lollipop_status == 'good':
+        if lollipop_status == "good":
             impl.lollipop_set(response)
         else:
             impl.lollipop_clear(response)
 
     return response
 
+
 def lollipop_captcha_failed():
     return render("ckanext_lollipop/lollipop_captcha_failed.html", {})
+
 
 lollipop.add_url_rule(
     rule="/captcha_process",

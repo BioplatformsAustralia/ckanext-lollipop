@@ -32,10 +32,13 @@ def test_lollipop_process_bad_captcha(app, reset_db):
 
     assert resp.body.find("CAPTCHA Required") >= 0
 
+
 @pytest.mark.ckan_config("ckan.plugins", "lollipop")
 @pytest.mark.ckan_config("app_instance_uuid", "b9fd6df7-46c0-402f-8739-65925dbc36ae")
 @pytest.mark.ckan_config("ckanext.lollipop.cookie_name", "custard_creams")
-@pytest.mark.ckan_config("ckan.recaptcha.privatekey", "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe")
+@pytest.mark.ckan_config(
+    "ckan.recaptcha.privatekey", "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
+)
 @pytest.mark.usefixtures("with_plugins")
 def test_lollipop_process_good_captcha(app, reset_db):
     data = {
@@ -50,6 +53,7 @@ def test_lollipop_process_good_captcha(app, reset_db):
     assert resp.status_code == 200
 
     assert not resp.body.find("CAPTCHA Required") >= 0
+
 
 @pytest.mark.ckan_config("ckan.plugins", "lollipop")
 @pytest.mark.usefixtures("with_plugins")

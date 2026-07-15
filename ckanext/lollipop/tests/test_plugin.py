@@ -61,18 +61,20 @@ from ckan.plugins import get_plugin
 
 log = logging.getLogger(__name__)
 
+
 @pytest.mark.ckan_config("ckan.plugins", "lollipop")
 @pytest.mark.usefixtures("with_plugins")
 def test_plugin():
     assert plugin_loaded("lollipop")
+
 
 @pytest.mark.ckan_config("app_instance_uuid", "b9fd6df7-46c0-402f-8739-65925dbc36ae")
 @pytest.mark.ckan_config("ckan.plugins", "lollipop")
 @pytest.mark.usefixtures("with_plugins")
 class TestLollipopPlugin(object):
     @pytest.mark.usefixtures("clean_db")
-    def test_lollipop_set(self,app):
-        url = tk.url_for('dataset.search')
+    def test_lollipop_set(self, app):
+        url = tk.url_for("dataset.search")
 
         response = app.get(url)
 
@@ -82,10 +84,13 @@ class TestLollipopPlugin(object):
 
         assert p.lollipop_set(response)
 
-        assert u'ckanext-lollipop-yum=a772cc4392939dda9ef66ec4c90a303f8ba42badf29279b4891077a0d6881e2b' in response.headers[u'Set-Cookie']
+        assert (
+            "ckanext-lollipop-yum=a772cc4392939dda9ef66ec4c90a303f8ba42badf29279b4891077a0d6881e2b"
+            in response.headers["Set-Cookie"]
+        )
 
-    def test_lollipop_update(self,app):
-        url = tk.url_for('dataset.search')
+    def test_lollipop_update(self, app):
+        url = tk.url_for("dataset.search")
 
         response = app.get(url)
 
@@ -95,10 +100,13 @@ class TestLollipopPlugin(object):
 
         assert p.lollipop_update(response)
 
-        assert u'ckanext-lollipop-yum=a772cc4392939dda9ef66ec4c90a303f8ba42badf29279b4891077a0d6881e2b' in response.headers[u'Set-Cookie']
+        assert (
+            "ckanext-lollipop-yum=a772cc4392939dda9ef66ec4c90a303f8ba42badf29279b4891077a0d6881e2b"
+            in response.headers["Set-Cookie"]
+        )
 
-    def test_lollipop_clear(self,app):
-        url = tk.url_for('dataset.search')
+    def test_lollipop_clear(self, app):
+        url = tk.url_for("dataset.search")
 
         response = app.get(url)
 
@@ -108,21 +116,26 @@ class TestLollipopPlugin(object):
 
         assert p.lollipop_clear(response)
 
-        log.warn(response.headers[u'Set-Cookie'])
-        assert u'ckanext-lollipop-yum=a772cc4392939dda9ef66ec4c90a303f8ba42badf29279b4891077a0d6881e2b' in response.headers[u'Set-Cookie']
-        assert u'Expires=Thu, 01-Jan-1970 00:00:07 GMT' in response.headers[u'Set-Cookie']
+        log.warn(response.headers["Set-Cookie"])
+        assert (
+            "ckanext-lollipop-yum=a772cc4392939dda9ef66ec4c90a303f8ba42badf29279b4891077a0d6881e2b"
+            in response.headers["Set-Cookie"]
+        )
+        assert "Expires=Thu, 01-Jan-1970 00:00:07 GMT" in response.headers["Set-Cookie"]
 
     def test_lollipop_required(self):
         pass
 
     # Google test key for reCaptcha
-    @pytest.mark.ckan_config("ckan.recaptcha.privatekey", "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe")
-    def test_lollipop_process(self,app):
+    @pytest.mark.ckan_config(
+        "ckan.recaptcha.privatekey", "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
+    )
+    def test_lollipop_process(self, app):
         p = get_plugin("lollipop")
 
         with app.flask_app.test_request_context(
             tk.url_for("lollipop.lollipop_process"),
             method="GET",
             data={"g-recaptcha-response": "willAlwaysPassWithTestKey"},
-            ):
-                assert p.lollipop_process({},{}) == "good"
+        ):
+            assert p.lollipop_process({}, {}) == "good"

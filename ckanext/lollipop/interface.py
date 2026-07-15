@@ -33,7 +33,7 @@ class ILollipop(interfaces.Interface):
         :rtype: bool
         """
         return True
-    
+
     def lollipop_process(self, context, data_dict):
         """Process the submitted CAPTCHA form
 
