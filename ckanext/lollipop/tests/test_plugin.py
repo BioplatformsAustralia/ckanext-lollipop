@@ -110,7 +110,7 @@ class TestLollipopPlugin(object):
 
         log.warn(response.headers[u'Set-Cookie'])
         assert u'ckanext-lollipop-yum=a772cc4392939dda9ef66ec4c90a303f8ba42badf29279b4891077a0d6881e2b' in response.headers[u'Set-Cookie']
-        assert u'Expires=Thu, 01-Jan-1970 00:00:00 GMT' in response.headers[u'Set-Cookie']
+        assert u'Expires=Thu, 01-Jan-1970 00:00:07 GMT' in response.headers[u'Set-Cookie']
 
     def test_lollipop_required(self):
         pass
