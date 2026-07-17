@@ -12,10 +12,12 @@ from ckan.common import g
 log = logging.getLogger(__name__)
 
 
-@pytest.mark.ckan_config("app_instance_uuid", "b9fd6df7-46c0-402f-8739-65925dbc36ae")
 @pytest.mark.ckan_config("ckanext.lollipop.cookie_name", "custard_creams")
 @pytest.mark.ckan_config("ckan.plugins", "lollipop")
 class TestLollipopUtil(object):
+    @pytest.mark.ckan_config(
+        "app_instance_uuid", "b9fd6df7-46c0-402f-8739-65925dbc36ae"
+    )
     def test_cookie_filling(self):
         filling = lollipop_util.cookie_filling()
         prepared_beforehand = (
@@ -23,3 +25,7 @@ class TestLollipopUtil(object):
         )
 
         assert filling == prepared_beforehand
+
+    def test_cookie_filling_no_app_instance_uuid(self):
+        with pytest.raises(ValueError):
+            filling = lollipop_util.cookie_filling()
