@@ -24,13 +24,26 @@ def test_lollipop_process_bad_captcha(app, reset_db):
         "g-recaptcha-response": "notAValidResponse",
     }
 
-    resp = app.post(
+    response = app.post(
         tk.h.url_for("lollipop.lollipop_process"),
         data=data,
+        follow_redirects=False,
     )
-    assert resp.status_code == 200
+    assert response.status_code == 302
 
-    assert resp.body.find("CAPTCHA Required") >= 0
+    # Cookie to be cleared
+    assert [
+        cookie
+        for cookie in [
+            header[1] for header in response.headers if header[0] == "Set-Cookie"
+        ]
+        if "custard_creams=0b49850b093cfe6da565e20b3084e9371d27d5e26f4f08334541127fb8765f35"
+        in cookie
+        and (
+            "Expires=Thu, 01-Jan-1970 00:00:07 GMT" in cookie
+            or "Expires=Thu, 01 Jan 1970 00:00:07 GMT" in cookie
+        )
+    ]
 
 
 @pytest.mark.ckan_config("ckan.plugins", "lollipop")
@@ -46,13 +59,27 @@ def test_lollipop_process_good_captcha(app, reset_db):
         "g-recaptcha-response": "thisWillAlwaysWork",
     }
 
-    resp = app.post(
+    response = app.post(
         tk.h.url_for("lollipop.lollipop_process"),
         data=data,
+        follow_redirects=False,
     )
-    assert resp.status_code == 200
+    assert response.status_code == 302
 
-    assert not resp.body.find("CAPTCHA Required") >= 0
+    assert not (
+        [
+            cookie
+            for cookie in [
+                header[1] for header in response.headers if header[0] == "Set-Cookie"
+            ]
+            if "custard_creams=0b49850b093cfe6da565e20b3084e9371d27d5e26f4f08334541127fb8765f35"
+            in cookie
+            and (
+                "Expires=Thu, 01-Jan-1970 00:00:07 GMT" in cookie
+                or "Expires=Thu, 01 Jan 1970 00:00:07 GMT" in cookie
+            )
+        ]
+    )
 
 
 @pytest.mark.ckan_config("ckan.plugins", "lollipop")

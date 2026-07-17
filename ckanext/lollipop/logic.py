@@ -69,7 +69,6 @@ def lollipop_required():
 
     :rtype: bool
     """
-
     # exclude rejected CAPTCHA instructions
     if request.path.startswith(tk.url_for("lollipop.lollipop_captcha_failed")):
         return False

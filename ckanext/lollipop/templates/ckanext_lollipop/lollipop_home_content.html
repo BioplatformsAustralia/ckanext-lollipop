@@ -6,11 +6,19 @@
           {% block flash %}
             <div class="flash-messages">
               {% block flash_inner %}
-                {% for message in h.flash.pop_messages() | list %}
-                  <div class="alert fade in {{ message.category }}">
-                    {{ h.literal(message) }}
-                  </div>
-                {% endfor %}
+                {% if h.check_ckan_version('2.10') %}
+                  {% for category, message in get_flashed_messages(with_categories=true) %}
+                    <div class="alert fade in {{ category }}">
+                      {{ h.literal(message) }}
+                    </div>
+                  {% endfor %}
+                {% else %}
+                  {% for message in h.flash.pop_messages() | list %}
+                    <div class="alert fade in {{ message.category }}">
+                      {{ h.literal(message) }}
+                    </div>
+                  {% endfor %}
+                {% endif %}
               {% endblock %}
             </div>
           {% endblock %}

@@ -84,10 +84,14 @@ class TestLollipopPlugin(object):
 
         assert p.lollipop_set(response)
 
-        assert (
-            "ckanext-lollipop-yum=a772cc4392939dda9ef66ec4c90a303f8ba42badf29279b4891077a0d6881e2b"
-            in response.headers["Set-Cookie"]
-        )
+        assert [
+            cookie
+            for cookie in [
+                header[1] for header in response.headers if header[0] == "Set-Cookie"
+            ]
+            if "ckanext-lollipop-yum=a772cc4392939dda9ef66ec4c90a303f8ba42badf29279b4891077a0d6881e2b"
+            in cookie
+        ]
 
     def test_lollipop_update(self, app):
         url = tk.url_for("dataset.search")
@@ -100,10 +104,14 @@ class TestLollipopPlugin(object):
 
         assert p.lollipop_update(response)
 
-        assert (
-            "ckanext-lollipop-yum=a772cc4392939dda9ef66ec4c90a303f8ba42badf29279b4891077a0d6881e2b"
-            in response.headers["Set-Cookie"]
-        )
+        assert [
+            cookie
+            for cookie in [
+                header[1] for header in response.headers if header[0] == "Set-Cookie"
+            ]
+            if "ckanext-lollipop-yum=a772cc4392939dda9ef66ec4c90a303f8ba42badf29279b4891077a0d6881e2b"
+            in cookie
+        ]
 
     def test_lollipop_clear(self, app):
         url = tk.url_for("dataset.search")
@@ -116,12 +124,29 @@ class TestLollipopPlugin(object):
 
         assert p.lollipop_clear(response)
 
-        log.warn(response.headers["Set-Cookie"])
-        assert (
-            "ckanext-lollipop-yum=a772cc4392939dda9ef66ec4c90a303f8ba42badf29279b4891077a0d6881e2b"
-            in response.headers["Set-Cookie"]
-        )
-        assert "Expires=Thu, 01-Jan-1970 00:00:07 GMT" in response.headers["Set-Cookie"]
+        # Cookie present
+        assert [
+            cookie
+            for cookie in [
+                header[1] for header in response.headers if header[0] == "Set-Cookie"
+            ]
+            if "ckanext-lollipop-yum=a772cc4392939dda9ef66ec4c90a303f8ba42badf29279b4891077a0d6881e2b"
+            in cookie
+        ]
+
+        # Cookie to be cleared
+        assert [
+            cookie
+            for cookie in [
+                header[1] for header in response.headers if header[0] == "Set-Cookie"
+            ]
+            if "ckanext-lollipop-yum=a772cc4392939dda9ef66ec4c90a303f8ba42badf29279b4891077a0d6881e2b"
+            in cookie
+            and (
+                "Expires=Thu, 01-Jan-1970 00:00:07 GMT" in cookie
+                or "Expires=Thu, 01 Jan 1970 00:00:07 GMT" in cookie
+            )
+        ]
 
     def test_lollipop_required(self):
         pass
